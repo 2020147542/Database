@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>QnA Edit posts</title>
+    <link rel="stylesheet" href="https://unpkg.com/mvp.css">
+    <link rel="stylesheet" href="/uploads/style.css">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script src="https://kit.fontawesome.com/3bb8c2f12e.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <h1> <a href="/"> QnA 게시판 </a> </h1>
+
+    <div class="user-info">
+    <h3> 질문 수정하기 </h3>
+    <form method="post" action="/posts/<%=edit.id%>/edit?_method=PUT" enctype="multipart/form-data">
+        <p><label>질문 제목<br>
+                <input name="title" type="text" value="<%= edit.title %>" autofocus required>
+            </label></p>
+
+        <p><label>질문 내용<br>
+                <textarea name="content" rows="15" required>
+                    <%= edit.contents %>
+                </textarea>
+            </label></p>
+        
+        <p>파일 첨부하기<br>
+            <% if (files && files.length> 0) { %>
+                <% files.forEach(file=> { %>
+                    <% const pathParts=file.name.split('\\'); %>
+                        <% const fileName=pathParts[pathParts.length - 1]; %>
+                        <div>
+                            <input name="totalFile" value="<%= file.id %>" type="hidden" />
+                            <input type="checkbox" name="filesToKeep" value="<%= file.id %>" checked/>
+                            <%= fileName %>
+                        </div>
+                        <% }) %>
+                            <% } %>
+                            <br><label for="newFiles">
+                                <input type="file" name="newFiles" onchange="addFile(this);" multiple />
+                            </label>
+        <div class="files"></div>
+        </p>
+
+        <button type="submit">저장하기</button>
+        <button type="button" onclick="clearForm();">초기화</button>
+    </form>
+
+    </div>
+    <script>
+
+        async function addFile(obj) {
+            await resetFile();
+
+            let fileNum = 0;
+            let files = [];
+            let flag = true;
+            let max = 4;
+            let sofar = document.querySelectorAll('.filebox').length;
+            let remain = max - sofar;
+            let cur = obj.files.length;
+
+            if (cur > remain) {
+                alert("최대 " + max + "개만 첨부가능합니다.");
+                await clearForm();
+                return
+            }
+
+            for (let i = 0; i < Math.min(cur, remain); i++) {
+                const file = obj.files[i];
+
+                if (file.name.length > 100) {
+                    alert(`파일 이름이 너무 깁니다. 100자 이상인 파일(${file.name})은 첨부할 수 없습니다.`);
+                    flag = false;
+                }
+
+                else if (file.size > (100 * 1024 * 1024)) {
+                    alert(`파일(${file.name})이 100MB 이상입니다. 첨부할 수 없습니다.`);
+                    flag = false;
+                }
+
+                else if (file.name.lastIndexOf('.') === -1) {
+                    alert(`${file.name}의 경우, 파일에 확장자가 없습니다. 올바른 파일 확장자가 필요합니다.`);
+                    flag = false;
+                }
+
+                if (!flag) {
+                    await clearForm();
+                    return
+                }
+
+                let reader = new FileReader();
+                reader.onload = await function () {
+                    files.push(file);
+                    // 선택한 파일 보여주기
+                    let showFile = '<div id="file' + fileNum + '" class="selected">';
+                    showFile += '   <p class="filename">' + file.name + '</p>';
+                    showFile += '</div>';
+                    let fileList = document.querySelector(".files");
+                    fileList.innerHTML += showFile;
+                    fileNum++;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        async function resetFile() {
+            let prev = document.querySelectorAll(".files .selected");
+
+            prev.forEach(function (items) {
+                items.remove();
+            });
+        }
+
+        async function clearForm() {
+            await resetFile();
+            const form = document.querySelector("form");
+            form.reset();
+        }
+
+    </script>
+
+</body>
+
+</html>

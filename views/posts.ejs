@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>QnA posts</title>
+    <link rel="stylesheet" href="https://unpkg.com/mvp.css">
+    <link rel="stylesheet" href="/uploads/style.css">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+
+<body>
+    <h1><a href="/">QnA 게시판</a></h1>
+    <div class="user-info">
+        <h3>전체 글 확인하기</h3>
+
+        <form action="/posts" method="post">
+            <label for="category">검색 카테고리:</label>
+            <select name="category" id="category">
+                <option value="title" selected>글 제목</option>
+                <option value="content">글 내용</option>
+                <option value="titleAndContent">글 제목 및 내용</option>
+            </select>
+            <label for="keyword">검색어:</label>
+            <input type="text" name="keyword" id="keyword" placeholder="검색어를 입력하세요">
+            <label for="sortBy">정렬 기준:</label>
+            <select name="sortBy" id="sortBy">
+                <option value="createdAt" selected>작성 시간(최신순)</option>
+                <option value="updatedAt">수정 시간(최신순)</option>
+                <option value="views">조회수(높은순)</option>
+                <option value="importance">중요도(높은순)</option>
+            </select>
+            <button type="submit">검색/정렬</button>
+            <button type="button" id="addpost" onclick="location.href='/posts/add'">질문 글 작성하기</button>
+        </form>
+    </div>
+
+    <div class="user-info">
+        <% if (posts && posts.length) { %>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Title</th>
+                        <th>Views</th>
+                        <th>Created At</th>
+                        <th>Updated At</th>
+                        <th>중요도</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% posts.forEach((post, index)=> { %>
+                        <tr>
+                            <td>
+                                <%= index + 1 %>
+                            </td>
+                            <td>
+                                <a href="/posts/<%= post.id %>">
+                                    <%= post.title %>
+                                </a>
+                            </td>
+                            <td>
+                                <%= post.views %>
+                            </td>
+                            <td>
+                                <%= post.created_at %>
+                            </td>
+                            <td>
+                                <%= post.updated_at %>
+                            </td>
+                            <td>
+                                <%= post.important %>
+                            </td>
+                        </tr>
+                        <% }); %>
+                </tbody>
+            </table>
+            <% } else { %>
+                <h5>존재하는 글이 없습니다.</h5>
+                <% } %>
+    </div>
+
+</body>
+
+</html>

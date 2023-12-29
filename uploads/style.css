@@ -1,0 +1,195 @@
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+            text-align: center;
+        }
+
+        h1 {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            margin: 0;
+        }
+
+        .post-container,
+        .answers-container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            margin: 10px 0;
+        }
+
+        p {
+            margin: 0;
+        }
+
+        .attach {
+            text-align: left;
+        }
+
+        .content {
+            white-space: pre-wrap;
+            word-break: break-word;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
+            /* 수평 가운데 정렬을 위해 추가 */
+            margin-bottom: 15px;
+            max-width: 800px;
+            /* 적절한 최대 너비로 설정 */
+        }
+
+        .answer-file-container,
+        .file-container a {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .date-info {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        button {
+            padding: 10px;
+            margin-right: 10px;
+            cursor: pointer;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .like-button {
+            background-color: #3498db;
+        }
+
+        .like-button:hover {
+            background-color: #2980b9;
+        }
+
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .post-container .file-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .post-container .file-container img {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .file-items {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            /* 각 파일 아이템 사이의 간격 조정 */
+        }
+
+        .file-icon {
+            margin-right: 5px;
+            /* 파일 아이콘과 파일 이름 간의 간격 조정 */
+        }
+
+        .file-link {
+            font-size: 12px;
+            /* 파일 링크의 글꼴 크기 조정 */
+            text-decoration: none;
+            /* 링크에 밑줄 제거 */
+            color: #0366d6;
+            /* 링크 색상 지정 (원하는 색상으로 변경) */
+        }
+
+        .user-info {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            /* 사용자 정보 중앙 정렬을 위해 추가 */
+        }
+
+        .user-info h4 {
+            margin: 10px 0;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            /* 버튼 그룹 가운데 정렬을 위해 추가 */
+            margin-top: 20px;
+            /* 상단 여백을 추가하여 사용자 정보와 버튼 사이 간격을 조절합니다. */
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ddd;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #333;
+            color: #fff;
+        }
+
+        h5 {
+            margin-top: 20px;
+        }
+form {
+    max-width: 800px;
+    margin: 20px auto;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    /* 추가된 부분 */
+}
+
+form label,
+form select,
+form input,
+form button {
+    margin-bottom: 15px;
+        /* 수정된 부분 */
+        flex: 0 0 40%;
+}

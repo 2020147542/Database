@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>QnA login</title>
+    <link rel="stylesheet" href="https://unpkg.com/mvp.css">
+    <link rel="stylesheet" href="/uploads/style.css">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style>
+    form {
+        max-width: 300px;
+        width: 100%;
+    }
+    </style>
+</head>
+
+<body>
+    <h1> <a href="/"> QnA 게시판 </a> </h1>
+
+    <div class="user-info">
+    <% if(message !="" ) { %>
+        <h3> error: <%= message %>
+        </h3>
+        <% } %>
+
+            <h3> 로그인 </h3>
+            <form method="post" action="/users/login">
+                <p class="loginbox"><label>아이디<br>
+                        <input name="id" type="text" placeholder="ID를 입력하세요." autofocus required>
+                    </label></p>
+
+                <p class="loginbox"><label>비밀번호<br>
+                        <input name="pw" type="password" placeholder="비밀번호를 입력하세요." required>
+                    </label></p>
+
+                <button type="submit">login</button>
+                <button type="reset">reset</button>
+            </form>
+            </div>
+</body>
+
+</html>

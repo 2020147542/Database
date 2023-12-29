@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://unpkg.com/mvp.css">
+    <link rel="stylesheet" href="/uploads/style.css">
+    <title>Home</title>
+</head>
+
+<body>
+    <h1>Welcome to QnA! </h1>
+    <div class="user-info">
+        <% if(user !=="" ) { %>
+
+            <h3>
+                <%= user.name %>님 환영합니다.
+            </h3>
+            <div class="button-container">
+                <button id="logout" onclick="location.href='/users/logout'">로그아웃</button>
+                <button id="addpost" onclick="location.href='/posts/add'">질문 글 작성하기</button>
+                <% } else { %>
+                    <h4>아직 로그인 되어 있지 않습니다.</h4>
+                    <button id="login" onclick="location.href='/users/login'">로그인</button>
+                    <% } %>
+                        <button id="posts" onclick="location.href='/posts'">질문 글 전체 보기</button>
+            </div>
+    </div>
+
+</body>
+
+</html>

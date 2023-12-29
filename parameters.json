@@ -1,0 +1,7 @@
+{
+    "decayPeriod": "7", 
+    "decayRate": "0.8", 
+    "threshold": "3", 
+    "viewsWeight": "0.5",
+    "clicksWeight": "0.5"
+}

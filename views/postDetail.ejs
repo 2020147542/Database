@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title> QnA posts </title>
+    <link rel="stylesheet" href="https://unpkg.com/mvp.css">
+    <link rel="stylesheet" href="/uploads/style.css">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+
+<body>
+    <h1><a href="/">QnA 게시판</a></h1>
+
+    <div class="post-container">
+        <div>
+            <div class="post-header">
+                <h2>
+                    <%= postDetail[0].title %>
+                </h2>
+
+                <div class="button-container">
+                    <% if (users && (users.user_id == postDetail[0].userId || users.role)) { %>
+                        <button id="changePost" onclick="changePost(this)"
+                            data-post-id="<%= postDetail[0].id %>">수정하기</button>
+                        <button type="submit" data-post-id="<%= postDetail[0].id %>" onclick="deletePost(this)">삭제하기</button>
+                        <% } %>
+                            <button id="likePost" ondblclick="likePost(this)" data-post-id="<%= postDetail[0].id %>">
+                                <%= isPostGood ? '중요해요 ★' : '중요해요 ☆' %>
+                            </button>
+                </div>
+            </div>
+            <div class="date-info">
+                <p>조회수: <%= postDetail[0].views %>
+                </p>
+                <p>작성 시간: <%= postDetail[0].created_at %>
+                </p>
+                <p>수정 시간: <%= postDetail[0].updated_at %>
+                </p>
+                <p>중요도: <%= postDetail[0].important %>
+                </p>
+            </div>
+            <p class="content">
+                <%= postDetail[0].content %>
+            </p>
+            <div class="file-container">
+                <% if (postFile.length> 0) { %>
+                    <p class="attach">🔽첨부파일</p>
+                    <div class="file-items">
+                        <% postFile.forEach(function(item) { %>
+                            <% const pathParts=item.name.split('\\'); %>
+                                <% const fileName=pathParts[pathParts.length - 1]; %>
+                                    <% const extension=item.type.slice(1).toLowerCase(); %>
+
+                                        <div class="file-item">
+                                            <% if (['jpg', 'jpeg' , 'png' , 'gif' ].includes(extension)) { %>
+                                                🌉 <a class="file-link" type="media_type"
+                                                    href="/<%= item.name.replace(/\\/g, '/') %>"
+                                                    download="<%= fileName %>">
+                                                    <%= fileName %>
+                                                </a>
+                                                <% } else if (['mp4', 'mov' , 'avi' ].includes(extension)) { %>
+                                                    📹 <a class="file-link" type="media_type"
+                                                        href="/<%= item.name.replace(/\\/g, '/') %>"
+                                                        download="<%= fileName %>">
+                                                        <%= fileName %>
+                                                    </a>
+                                                    <% } else { %>
+                                                        📁 <a class="file-link" type="media_type"
+                                                            href="/<%= item.name.replace(/\\/g, '/') %>"
+                                                            download="<%= fileName %>">
+                                                            <%= fileName %>
+                                                        </a>
+                                                        <% } %>
+                                        </div>
+                                        <% }) %>
+                                            <% } %>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <form action="/answers/<%=postDetail[0].id%>/sorted" method="post">
+        <label for="sortBy">답변 정렬 기준:</label>
+        <select name="sortBy" id="sortBy">
+            <option value="createdAt" selected>작성 시간(최신순)</option>
+            <option value="updatedAt">수정 시간(최신순)</option>
+            <option value="importance">중요도(높은순)</option>
+        </select>
+        <button type="submit">검색/정렬</button>
+        <button type="button" id="addAnswer" onclick="answer(this)" data-post-id="<%= postDetail[0].id %>">답변 추가</button>
+    </form>
+
+    <div class="answers-container">
+        <% if (answers.length == 0 ) {  %>
+            <h5>존재하는 답변이 없습니다.</h5>
+        <% } %>
+        <% answers.forEach((answer, index)=> { %>
+            <div class="answer">
+                <p class="attach">No.<%= index + 1 %>
+                </p>
+                <div class="post-header">
+                    <h3>
+                        <%= answer.title %>
+                    </h3>
+                    <div class="button-container">
+                        <% if (users && (users.user_id==answer.userId || users.role)) { %>
+                            <button id="changeAnswer" onclick="changeAnswer(this)"
+                                data-answer-id="<%= answer.id %>">수정하기</button>
+                            <button type="submit" data-answer-id="<%= answer.id %>"
+                                onclick="deleteAnswer(this)">삭제하기</button>
+                            <% } %>
+
+                                <button class="likeAnswer" ondblclick="likeAnswer(this)" data-answer-id="<%= answer.id %>">
+                                    <%= isAnswerGood[answer.id] ? '중요해요 ★' : '중요해요 ☆' %>
+                                </button>
+
+                    </div>
+                </div>
+
+
+                <div class="date-info">
+                    <p>조회수: <%= answer.views %>
+                    </p>
+                    <p>작성 시간: <%= answer.created_at %>
+                    </p>
+                    <p>수정 시간: <%= answer.updated_at %>
+                    </p>
+                    <p>중요도: <%= answer.important %>
+                    </p>
+                </div>
+                <p class="content">
+                    <%= answer.content %>
+                </p>
+                <div class="answer-file-container">
+                    <% if (answersFile[answer.id]) { %>
+                        <p class="attach">🔽첨부파일</p>
+                        <div class="file-items">
+                            <% answersFile[answer.id].forEach(function(item) { %>
+                                <% const pathParts=item.name.split('\\'); %>
+                                    <% const fileName=pathParts[pathParts.length - 1]; %>
+                                        <% const extension=item.type.slice(1).toLowerCase(); %>
+
+                                            <div class="file-item">
+                                                <% if (['jpg', 'jpeg' , 'png' , 'gif' ].includes(extension)) { %>
+                                                    🌉 <a class="file-link" type="media_type"
+                                                        href="/<%= item.name.replace(/\\/g, '/') %>"
+                                                        download="<%= fileName %>">
+                                                        <%= fileName %>
+                                                    </a>
+                                                    <% } else if (['mp4', 'mov' , 'avi' ].includes(extension)) { %>
+                                                        📹 <a class="file-link" type="media_type"
+                                                            href="/<%= item.name.replace(/\\/g, '/') %>"
+                                                            download="<%= fileName %>">
+                                                            <%= fileName %>
+                                                        </a>
+                                                        <% } else { %>
+                                                            📁 <a class="file-link" type="media_type"
+                                                                href="/<%= item.name.replace(/\\/g, '/') %>"
+                                                                download="<%= fileName %>">
+                                                                <%= fileName %>
+                                                            </a>
+                                                            <% } %>
+                                            </div>
+                                            <% }) %>
+                                                <% } %>
+                        </div>
+                </div>
+                <hr />
+                <% }); %>
+            </div>
+    </div>
+
+
+    <script>
+        async function likePost(button) {
+            const postId = button.getAttribute('data-post-id');
+
+            try {
+                const response = await fetch(`/posts/${postId}/like`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (response.status === 302) {
+                    return window.location.href = "/users/login";
+                }
+
+                const result = await response.json();
+
+                // 서버에서 받은 응답을 기반으로 좋아요 버튼 상태 업데이트
+                if (result.good) {
+                    button.innerText = '중요해요 ★';
+                } else {
+                    button.innerText = '중요해요 ☆';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        async function likeAnswer(button) {
+            const answerId = button.getAttribute('data-answer-id');
+
+            try {
+                const response = await fetch(`/answers/${answerId}/like`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (response.status === 302) {
+                    return window.location.href = "/users/login";
+                }
+
+                const result = await response.json();
+
+                // 서버에서 받은 응답을 기반으로 좋아요 버튼 상태 업데이트
+                if (result.good) {
+                    button.innerText = '중요해요 ★';
+                } else {
+                    button.innerText = '중요해요 ☆';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function answer(button) {
+            const postId = button.getAttribute('data-post-id');
+            window.location.href = `/answers/${postId}/add`;
+        }
+
+        function changePost(button) {
+            const postId = button.getAttribute('data-post-id');
+            window.location.href = `/posts/${postId}/edit`;
+        }
+
+        function changeAnswer(button) {
+            const answerId = button.getAttribute('data-answer-id');
+            window.location.href = `/answers/${answerId}/edit`;
+        }
+
+        async function deletePost(button) {
+            const postId = button.getAttribute('data-post-id');
+            window.location.href = `/posts/${postId}/delete`;
+        }
+
+        async function deleteAnswer(button) {
+            const answerId = button.getAttribute('data-answer-id');
+            window.location.href = `/answers/${answerId}/delete`;
+        }
+
+    </script>
+</body>
+
+</html>
